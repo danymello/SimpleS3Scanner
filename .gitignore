@@ -1,0 +1,4 @@
+downloads/*
+.python-version
+*.pyc
+src/__pychache__
