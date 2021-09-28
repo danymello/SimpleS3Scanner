@@ -29,7 +29,7 @@ optional arguments:
   -c, --check           Brute Force some S3 permissions to check if
                         credentails have access to it
   -v, --debug           Print debug information to the screen.
-```
+``` 
 
 ### AWS Permissions
 
@@ -60,3 +60,4 @@ The tool can validate what permissions your AWS credentials have access to from 
 ### Roadmap
 
 - [ ] Saved results of searches to do all the exfiltration at once.
+- [ ] Document config file in README.
