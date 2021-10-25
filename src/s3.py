@@ -30,36 +30,42 @@ class S3:
     def listBuckets(self):
         
         buckets = []
-        
-        try:
-            
-            response = self.client.list_buckets()
-            for bucket in response['Buckets']:
+           
+        response = self.client.list_buckets()
+        for bucket in response['Buckets']:
                 
-                #bucket not whitelisted by default
-                NOT_WHITELISTED = True
-                bucket_name = bucket['Name']
+            #bucket not whitelisted by default
+            NOT_WHITELISTED = True
+            bucket_name = bucket['Name']
                 
-                for whitelist_bucket in WHITELIST_BUCKETS:                   
+            for whitelist_bucket in WHITELIST_BUCKETS:                   
                 
-                    if whitelist_bucket in bucket_name:
+                if whitelist_bucket in bucket_name:
                         
-                        NOT_WHITELISTED = False                        
-                        break
+                    NOT_WHITELISTED = False                        
+                    break
                 
-                if NOT_WHITELISTED ==  True:
+            if NOT_WHITELISTED ==  True:
                     
-                    #creating Bucket object and adding to the list of buckets
-                    bucket = Bucket(bucket['Name'])
-                    buckets.append(bucket)                
+                #creating Bucket object and adding to the list of buckets
+                bucket = Bucket(bucket['Name'])
+                buckets.append(bucket)
+                    
+                try:
+                    
                     self.getObjects(bucket)
                     self.getBucketPolicy(bucket)
                     self.getBucketACL(bucket)
                     
             
-        except botocore.exceptions.ClientError as error:
-            print(error.response)
-            return
+                except botocore.exceptions.ClientError as error:
+                    if error.response['Error']['Code'] == "NoSuchBucket":  
+                            print_error("Bucket does not exist.. skipping it..")
+                            buckets.remove(bucket)
+                            pass
+                    else:
+                        print(error.response)
+                        pass
         
         self.buckets = buckets
         
