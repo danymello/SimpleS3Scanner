@@ -136,7 +136,7 @@ def selectWordlists():
         
     print('\n')
     selection = input(f'Enter your choice: ')
-    while int(selection) not in range (1, id):
+    while int(selection) not in range (0, id):
              
         selection = input('Wrong input, enter your choice again: ')
         
